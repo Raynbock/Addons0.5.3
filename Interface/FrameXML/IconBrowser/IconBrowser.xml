@@ -1,0 +1,774 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="IconBrowser.lua"/>
+
+    <Frame name="IconBrowserFrame" parent="UIParent" inherits="DialogBoxFrame" hidden="true" enableMouse="true">
+        <Size>
+            <AbsDimension x="460" y="340"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Scripts>
+            <OnLoad>
+                IconBrowser_OnLoad();
+                local btn = getglobal(this:GetName().."Button");
+                if ( btn ) then
+                    btn:Hide();
+                end
+            </OnLoad>
+            <OnMouseDown>
+                IconBrowser_OnMouseDown();
+            </OnMouseDown>
+            <OnMouseUp>
+                IconBrowser_OnMouseUp();
+            </OnMouseUp>
+        </Scripts>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="IconBrowserTitleText" inherits="GameFontNormal" text="Icon Browser">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="-16"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="IconBrowserPageText" inherits="GameFontNormalSmall" text="1 / 1">
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="0" y="40"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <!-- Filter edit box -->
+            <EditBox name="IconBrowserFilterBox" autoFocus="false" letters="64">
+                <Size>
+                    <AbsDimension x="260" y="18"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOP">
+                        <Offset>
+                            <AbsDimension x="0" y="-36"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="140" y="32"/>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="7"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="140" y="32"/>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="TOPRIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="7"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <FontString inherits="ChatFontNormal"/>
+                <Scripts>
+                    <OnTextChanged>
+                        IconBrowser_OnFilterChanged();
+                    </OnTextChanged>
+                    <OnEnterPressed>
+                        this:ClearFocus();
+                    </OnEnterPressed>
+                    <OnEscapePressed>
+                        IconBrowser_OnFilterEscape();
+                    </OnEscapePressed>
+                </Scripts>
+            </EditBox>
+
+            <!-- Close button (small X in the corner) -->
+            <Button name="IconBrowserCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-16" y="-16"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowserFrame:Hide();
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <!-- Prev / Next page buttons -->
+            <Button name="IconBrowserPrevButton">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="40" y="40"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_PrevPage();
+                    </OnClick>
+                </Scripts>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+
+            <Button name="IconBrowserNextButton">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-40" y="40"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_NextPage();
+                    </OnClick>
+                </Scripts>
+                <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+                <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+                <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+            </Button>
+
+            <!-- Icon grid: 6x4 buttons (24 per page) -->
+            <!-- Row 1: y = -80, x = 114,154,194,234,274,314 -->
+            <Button name="IconBrowserButton1" id="1">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="114" y="-80"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton2" id="2">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="154" y="-80"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton3" id="3">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="194" y="-80"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton4" id="4">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="234" y="-80"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton5" id="5">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="274" y="-80"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton6" id="6">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="314" y="-80"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <!-- Row 2: y = -120 -->
+            <Button name="IconBrowserButton7" id="7">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="114" y="-120"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton8" id="8">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="154" y="-120"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton9" id="9">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="194" y="-120"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton10" id="10">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="234" y="-120"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton11" id="11">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="274" y="-120"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton12" id="12">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="314" y="-120"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <!-- Row 3: y = -160 -->
+            <Button name="IconBrowserButton13" id="13">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="114" y="-160"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton14" id="14">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="154" y="-160"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton15" id="15">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="194" y="-160"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton16" id="16">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="234" y="-160"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton17" id="17">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="274" y="-160"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton18" id="18">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="314" y="-160"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <!-- Row 4: y = -200 -->
+            <Button name="IconBrowserButton19" id="19">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="114" y="-200"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton20" id="20">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="154" y="-200"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton21" id="21">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="194" y="-200"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton22" id="22">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="234" y="-200"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton23" id="23">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="274" y="-200"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+
+            <Button name="IconBrowserButton24" id="24">
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="314" y="-200"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        IconBrowser_IconButton_OnClick();
+                    </OnClick>
+                    <OnEnter>
+                        IconBrowser_IconButton_OnEnter();
+                    </OnEnter>
+                    <OnLeave>
+                        IconBrowser_IconButton_OnLeave();
+                    </OnLeave>
+                </Scripts>
+                <NormalTexture name="$parentIcon"/>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>

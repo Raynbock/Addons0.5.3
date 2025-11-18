@@ -1,0 +1,446 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
+
+    <!-- Load Lua -->
+    <Script file="MacroBar_Data.lua"/>
+    <Script file="MacroBar.lua"/>
+
+    <Frame name="MacroBarFrame" parent="UIParent" frameStrata="MEDIUM">
+        <Size>
+            <!-- 12 buttons * 36px wide, 2 rows high -->
+            <AbsDimension x="432" y="72"/>
+        </Size>
+        <Anchors>
+            <!-- Same bottom row position as before -->
+            <Anchor point="BOTTOM" relativeTo="UIParent" relativePoint="BOTTOM">
+                <Offset>
+                    <AbsDimension x="-50" y="70"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+
+        <Frames>
+            <!-- Background art: only the center button strip from UI-MainMenuBar-Dwarf -->
+            <Frame name="MacroBarArtFrame" frameStrata="LOW">
+                <Anchors>
+                    <Anchor point="TOPLEFT"/>
+                    <Anchor point="BOTTOMRIGHT"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <!-- Left-middle piece -->
+                        <Texture name="MacroBarTexture1" file="Interface\MainMenuBar\UI-MainMenuBar-Dwarf">
+                            <Size>
+								<AbsDimension x="256" y="43"/>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="BOTTOM">
+                                    <Offset>
+                                        <!-- Centered: shift left a bit -->
+										<AbsDimension x="-96" y="-8"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+							<TexCoords left="0" right="1.0" top="0.83" bottom="1.0"/>
+                        </Texture>
+
+                        <!-- Right-middle piece -->
+                        <Texture name="MacroBarTexture2" file="Interface\MainMenuBar\UI-MainMenuBar-Dwarf">
+                            <Size>
+                                <AbsDimension x="256" y="43"/>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="BOTTOM">
+                                    <Offset>
+                                        <!-- Shift right to sit next to piece 1 -->
+										<AbsDimension x="160" y="-8"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="1.0" top="0.58" bottom="0.75"/>
+                        </Texture>
+        <!-- Top row background - left piece -->
+        <Texture name="MacroBarTexture1Top" file="Interface\MainMenuBar\UI-MainMenuBar-Dwarf">
+            <Size>
+                <AbsDimension x="256" y="43"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP">
+                    <Offset>
+                        <!-- Start with y = 0; tweak if you want it a bit lower/higher -->
+                        <AbsDimension x="-96" y="6"/>
+                    </Offset>
+                </Anchor>
+            </Anchors>
+            <!-- Same slice you used for MacroBarTexture1 -->
+							<TexCoords left="0" right="1.0" top="0.83" bottom="1.0"/>
+        </Texture>
+
+        <!-- Top row background - right piece -->
+        <Texture name="MacroBarTexture2Top" file="Interface\MainMenuBar\UI-MainMenuBar-Dwarf">
+            <Size>
+                <AbsDimension x="256" y="43"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP">
+                    <Offset>
+                        <AbsDimension x="160" y="6"/>
+                    </Offset>
+                </Anchor>
+            </Anchors>
+            <!-- Same slice you used for MacroBarTexture2 -->
+            <TexCoords left="0" right="1.0" top="0.58" bottom="0.75"/>
+        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <!-- Macro buttons -->
+
+            <!-- Bottom row (1–12) -->
+            <CheckButton name="MacroButton1" inherits="ActionButtonTemplate" id="1">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="MacroBarFrame" relativePoint="BOTTOMLEFT">
+                        <Offset><AbsDimension x="-1" y="-5"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton2" inherits="ActionButtonTemplate" id="2">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton1" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton3" inherits="ActionButtonTemplate" id="3">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton2" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton4" inherits="ActionButtonTemplate" id="4">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton3" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton5" inherits="ActionButtonTemplate" id="5">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton4" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton6" inherits="ActionButtonTemplate" id="6">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton5" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton7" inherits="ActionButtonTemplate" id="7">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton6" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton8" inherits="ActionButtonTemplate" id="8">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton7" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton9" inherits="ActionButtonTemplate" id="9">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton8" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton10" inherits="ActionButtonTemplate" id="10">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton9" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton11" inherits="ActionButtonTemplate" id="11">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton10" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton12" inherits="ActionButtonTemplate" id="12">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton11" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <!-- Top row (13–24) -->
+            <CheckButton name="MacroButton13" inherits="ActionButtonTemplate" id="13">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="MacroBarFrame" relativePoint="TOPLEFT">
+                        <Offset><AbsDimension x="0" y="2"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton14" inherits="ActionButtonTemplate" id="14">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton13" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton15" inherits="ActionButtonTemplate" id="15">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton14" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton16" inherits="ActionButtonTemplate" id="16">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton15" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton17" inherits="ActionButtonTemplate" id="17">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton16" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton18" inherits="ActionButtonTemplate" id="18">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton17" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton19" inherits="ActionButtonTemplate" id="19">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton18" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton20" inherits="ActionButtonTemplate" id="20">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton19" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton21" inherits="ActionButtonTemplate" id="21">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton20" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton22" inherits="ActionButtonTemplate" id="22">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton21" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton23" inherits="ActionButtonTemplate" id="23">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton22" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="MacroButton24" inherits="ActionButtonTemplate" id="24">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="MacroButton23" relativePoint="RIGHT">
+                        <Offset><AbsDimension x="6" y="0"/></Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>MacroBarButton_OnLoad();</OnLoad>
+                    <OnClick>MacroBarButton_OnClick();</OnClick>
+                    <OnEnter>MacroBarButton_OnEnter();</OnEnter>
+                    <OnLeave>MacroBarButton_OnLeave();</OnLeave>
+                </Scripts>
+            </CheckButton>
+        </Frames>
+
+        <Scripts>
+            <OnLoad>MacroBar_OnLoad();</OnLoad>
+            <OnUpdate>MacroBar_OnUpdate();</OnUpdate>
+        </Scripts>
+    </Frame>
+</Ui>
