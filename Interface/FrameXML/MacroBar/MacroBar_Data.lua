@@ -83,7 +83,7 @@ MacroData = {
     },
 
     -- Character 2
-    ['Davir'] = {
+    ['NAMETWO'] = {
         {
             ABNumber = '1',
             name = '',
