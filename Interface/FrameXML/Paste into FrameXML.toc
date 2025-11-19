@@ -1,0 +1,6 @@
+Interface\FrameXML\AtlasAlpha\AtlasAlpha.xml
+
+Interface\FrameXML\MacroBar\MacroBar.xml
+
+Interface\FrameXML\IconBrowser\IconBrowser.xml
+
